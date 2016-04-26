@@ -19,7 +19,6 @@ def get_sys_log(sindex=None, eindex=None):
         log['_alias'] = log.get('alias', '')
         log['_host'] = log.get('host', '')
         log['_type'] = log.get('type', '')
-        log['_cron_running'] = log.get('cron_running', False)
         log['_timestamp'] = datetime.datetime.fromtimestamp(log.get('timestamp', 0))
         yield log
 

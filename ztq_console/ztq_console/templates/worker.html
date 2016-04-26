@@ -49,7 +49,7 @@
                           {% endif %}
                       </td>
                       <td>
-                          {% if worker['_cron_running'] %}
+                          {% if worker['cron_running'] %}
                               <pre> 运行 </pre>
                           {% else %}
                               <pre> 停止 </pre>
@@ -89,31 +89,29 @@
   </div>
 
 <h2>定时任务清单:</h2>
-'func_name':func_name,
-                'cron_info':cron_info,
-                'queue': queue_name,
-                'args':args,
-                'kw'
-<table>
+<div id="status-section">
+<table class="listing">
   <thead>
     <tr>
-      <td>执行时间</td>
-      <td>任务</td>
-      <td>队列</td>
-      <td>参数</td>
+      <th>执行时间</th>
+      <th>任务</th>
+      <th>队列</th>
+      <th>参数</th>
+      <th>附加参数</th>
     </tr>
   </thead>
   <tbody>
-   {% for worker in crons %}
+   {% for cron in crons %}
     <tr>
-      <td> {{crons['cron_info'].get('hour', 0}} 时 {{crons['cron_info'].get('minute', 0}} 分</td>
-      <td> {{crons['func_name']}} </td>
-      <td> {{crons['queue']}} </td>
-      <td> {{ ', '.join(list(crons['args']) + ['='.join(row) for row in crons['kw'].items()])}} </td>
+      <td> {{cron['cron_info'].get('hour', 0)}} 时 {{cron['cron_info'].get('minute', 0)}} 分</td>
+      <td> {{cron['func_name']}} </td>
+      <td> {{cron['queue']}} </td>
+      <td> {{ ', '.join(cron['args'])}} </td>
+      <td> {{ ', '.join(cron['kw'])}} </td>
     </tr>
    {% endfor %}
   </tbody>
 </table>
-
+</div>
   </body>
 </html>
