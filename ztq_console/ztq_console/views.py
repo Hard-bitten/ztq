@@ -56,7 +56,8 @@ def workers_view(request):
     """
 
     workers = utils.get_worker_list()    
-    return {'workers':workers}  
+    crons = ztq_core.model.get_cron_set()
+    return {'workers':workers, 'crons':crons}  
 
 @view_config(name='syslog', permission='edit')
 @view_config(name='workerlog', permission='edit')
@@ -97,7 +98,7 @@ def switch_redis(request):
             MENU_CONFIG['current_redis'] = redis_key
             break
 
-    route_name = request.view_name
+    #route_name = request.view_name
     return HTTPFound(location="/")
 
 

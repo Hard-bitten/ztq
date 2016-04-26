@@ -85,6 +85,7 @@ def report(start_time):
             cpu_percent=cpu_percent, 
             mem_total=mem_total, 
             mem_percent=mem_percent, 
+            cron_running=ztq_core.cron.CRON_RUNNING,
             started=start_time, 
             timestamp=int(time.time()),
             traceback=traceback_dict,

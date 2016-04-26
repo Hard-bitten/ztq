@@ -10,6 +10,7 @@ import time
 import model
 from task import split_full_func_name, push_task
 
+CRON_RUNNING = False
 
 def has_cron(func):
     if type(func) == str:
@@ -84,6 +85,8 @@ class CronThread(Thread):
         return True
 
 def start_cron():
+    global CRON_RUNNING;
+    CRON_RUNNING = True
     cron_thread = CronThread()
     cron_thread.setDaemon(True)
     cron_thread.start()
