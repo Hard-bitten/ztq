@@ -177,7 +177,10 @@ class JobThread(threading.Thread):
         ztq_core.get_work_log_queue().push(task)
         # 删除服务器的转换进程状态信息
         job_state = ztq_core.get_job_state(task['runtime']['worker'])
-        del job_state[task['runtime']['thread']]
+        try:
+            del job_state[task['runtime']['thread']]
+        except KeyError:
+            pass  # maybe killed
         self.start_job_time = 0
 
     def stop(self):
