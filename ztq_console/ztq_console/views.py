@@ -136,7 +136,7 @@ def stop_working_job(request):
     thread = request.matchdict['thread']
     thread_pid = request.matchdict['pid']
     # pid为-1则不能杀
-    if thread_pid == -1: 
+    if thread_pid == '-1': 
         jobs = ztq_core.get_job_state(worker_id)
 	task = jobs[thread]
         task['runtime']['reason'] = "manual stopped"
