@@ -131,17 +131,25 @@ def config_worker(request):
 def stop_working_job(request):
     """停止正在进行中的转换的工作
     """
+    # 获取url操作
+    worker_id = request.matchdict['id']
+    thread = request.matchdict['thread']
+    thread_pid = request.matchdict['pid']
+    # pid为-1则不能杀
+    if thread_pid == '-1': 
+        jobs = ztq_core.get_job_state(worker_id)
+	task = jobs[thread]
+        task['runtime']['reason'] = "manual stopped"
+        task['runtime']['end'] = int( time.time() )
+        ztq_core.push_runtime_error(task['runtime']['queue'], task)
+	del jobs[thread]
+        return HTTPFound(location = '/workerstatus')
+
     kill_command =   {
      'command':'kill',
      'timestamp':int(time.time()),
-     'pid':'',
+     'pid': thread_pid
      }
-    # 获取url操作
-    worker_id = request.matchdict['id']
-    thread_pid = request.matchdict['pid']
-    # pid为-1则不能杀
-    if thread_pid == -1: return HTTPFound(location = '/workerstatus')
-    else: kill_command['pid'] = thread_pid
     cmd_queue = ztq_core.get_command_queue(worker_id)
     # 避免同时发送多条结束命令
     if cmd_queue:
@@ -149,6 +157,7 @@ def stop_working_job(request):
             if command.get('pid', None) == kill_command['pid']:    
                 return HTTPFound(location = '/workerstatus')          
     cmd_queue.push(kill_command)  
+
     return HTTPFound(location = '/workerstatus')
 
 

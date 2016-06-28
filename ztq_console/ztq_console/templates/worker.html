@@ -78,6 +78,9 @@
                           {% if thread['_pid'] != -1 %}
                           <a class="bt" href="{{ gen_url('end_thread', id=worker['_worker_name'], thread=thread['_name'], pid=thread['_pid']) }}">停止</a><br>
                           {% endif %}
+                          {% if thread['_pid'] == -1 %}
+                          <a class="bt" href="{{ gen_url('end_thread', id=worker['_worker_name'], thread=thread['_name'], pid=thread['_pid']) }}">skip this when restart</a><br>
+                          {% endif %}
                           </div>
                       {% endfor %}
               </td>
