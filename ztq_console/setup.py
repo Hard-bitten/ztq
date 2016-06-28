@@ -6,7 +6,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
-requires = ['pyramid', 'WebError', 'pyramid_jinja2','ztq_core' ]
+requires = ['pyramid==1.4.5', 'WebError', 'pyramid_jinja2','ztq_core' ]
 
 setup(name='ztq_console',
       version='1.2.5',
