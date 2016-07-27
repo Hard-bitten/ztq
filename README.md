@@ -162,23 +162,23 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
              add_cron({'hour':1}, bgrewriteaof)
 
 5. 延时执行
-
-    # 10秒之后执行sendmail
-    sendmail(from, to, body, ztq_delay=10)
+    
+        # 10秒之后执行sendmail
+        sendmail(from, to, body, ztq_delay=10)
 
 6. 自动重试
-
-    # 定义任务，需要绑定到运行环境，重试3次
-    @async(bind=True, max_retries=3)
-    def sendmail(self, form, to, body):
-        try:
-            os.sleep(30)
-        except:
-            # 10秒时候再试
-            self.retry(countdown=10)
-
-    # 重试
-    sendmail(from, to, body)
+    
+        # 定义任务，需要绑定到运行环境，重试3次
+        @async(bind=True, max_retries=3)
+        def sendmail(self, form, to, body):
+            try:
+                os.sleep(30)
+            except:
+                # 10秒时候再试
+                self.retry(countdown=10)
+    
+        # 重试
+        sendmail(from, to, body)
 
 7. 任务串行
 
