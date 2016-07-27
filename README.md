@@ -161,7 +161,26 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
         if not has_cron(bgrewriteaof):
              add_cron({'hour':1}, bgrewriteaof)
 
-5. 任务串行
+5. 延时执行
+
+    # 10秒之后执行sendmail
+    sendmail(from, to, body, ztq_delay=10)
+
+6. 自动重试
+
+    # 定义任务，需要绑定到运行环境，重试3次
+    @async(bind=True, max_retries=3)
+    def sendmail(self, form, to, body):
+        try:
+            os.sleep(30)
+        except:
+            # 10秒时候再试
+            self.retry(countdown=10)
+
+    # 重试
+    sendmail(from, to, body)
+
+7. 任务串行
 
         from ztq_core import prepare_task
         # 根据(方法，参数)生成一个任务
@@ -169,7 +188,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
         # 执行完 send_mail 之后队列会自动将callback 放入指定的队列
         send_mail(body, ztq_callback=callback)
 
-6. 异常处理
+8. 异常处理
 
         from ztq_core import prepare_task
     
@@ -182,7 +201,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
         # 如果任务 send 抛出了任何异常，都会将fcallback 放入指定队列
         send(body, ztq_fcallback=fcallback)
 
-7. 进度回调
+9. 进度回调
 
         import ztq_worker
         @async(queue='doc2pdf')
@@ -196,7 +215,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
         pcallback = prepare_task(send2, body)
         doc2pdf(filename,  ztq_pcallback=pcallback)
 
-8. 批处理
+10. 批处理
 
         # 为提升性能，需要多个xapian索引操作，一次性提交数据库
         @async(queue=‘xapian’)
@@ -211,7 +230,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
         register_batch_queue(‘xapian’, 20, batch_func=do_commit)
 
 
-9. 插入到另外的redis数据库
+11. 插入到另外的redis数据库
 
         from ztq_core.redis_wrap import setup_redis
         setup_redis('proxy', HOST, PORT, db=0)
