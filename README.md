@@ -13,7 +13,7 @@ ZTQ是python语言的一个开源异步队列服务, 使用redis作为队列的�
 
 详细介绍可参看： https://github.com/everydo/ztq/raw/master/about-ztq.pptx
 
-ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看和易度文档管理等系统中广泛使用。
+ZTQ是由易度云办公(http://easydo.com) 赞助开发的，在易度云查看和易度文档管理等系统中广泛使用。
 
 主要作者和维护人:
 
@@ -69,18 +69,18 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
 
 3. 运行worker
 
-   1.使用virtualenv 建立虚拟环境
-        virtualenv ztq_env(并激活虚拟环境)
-   
-   2.安装   pip install ztq_core
-            pip install ztq_worker
-            pip install ztq_console
+    1.使用virtualenv 建立虚拟环境
+        virtualenv ztq_env
+        并激活虚拟环境
 
-   3.在 ztq_worker 目录运行
-        
+    2.安装      pip install ztq_core
+                pip install ztq_worker
+                pip install ztq_console
+
+    3.在 ztq_worker 目录运行
         python setup.py install
 
-   4.通过这个命令运行worker
+    4. 通过这个命令运行worker
 
         bin/ztq_worker worker.ini
 
@@ -117,7 +117,6 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
 
 启动监控后台
 --------------------
-
     在 ztq_console 目录下(已激活虚拟环境)
     1.运行 python bootstrap.py
     
@@ -181,26 +180,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
         if not has_cron(bgrewriteaof):
              add_cron({'hour':1}, bgrewriteaof)
 
-5. 延时执行
-    
-        # 10秒之后执行sendmail
-        sendmail(from, to, body, ztq_delay=10)
-
-6. 自动重试
-    
-        # 定义任务，需要绑定到运行环境，重试3次
-        @async(bind=True, max_retries=3)
-        def sendmail(self, form, to, body):
-            try:
-                os.sleep(30)
-            except:
-                # 10秒时候再试
-                self.retry(countdown=10)
-    
-        # 重试
-        sendmail(from, to, body)
-
-7. 任务串行
+5. 任务串行
 
         from ztq_core import prepare_task
         # 根据(方法，参数)生成一个任务
@@ -208,7 +188,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
         # 执行完 send_mail 之后队列会自动将callback 放入指定的队列
         send_mail(body, ztq_callback=callback)
 
-8. 异常处理
+6. 异常处理
 
         from ztq_core import prepare_task
     
@@ -221,7 +201,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
         # 如果任务 send 抛出了任何异常，都会将fcallback 放入指定队列
         send(body, ztq_fcallback=fcallback)
 
-9. 进度回调
+7. 进度回调
 
         import ztq_worker
         @async(queue='doc2pdf')
@@ -235,7 +215,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
         pcallback = prepare_task(send2, body)
         doc2pdf(filename,  ztq_pcallback=pcallback)
 
-10. 批处理
+8. 批处理
 
         # 为提升性能，需要多个xapian索引操作，一次性提交数据库
         @async(queue=‘xapian’)
@@ -250,7 +230,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
         register_batch_queue(‘xapian’, 20, batch_func=do_commit)
 
 
-11. 插入到另外的redis数据库
+9. 插入到另外的redis数据库
 
         from ztq_core.redis_wrap import setup_redis
         setup_redis('proxy', HOST, PORT, db=0)
