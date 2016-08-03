@@ -69,7 +69,21 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
 
 3. 运行worker
 
-   通过这个命令运行worker
+   1.使用virtualenv 建立虚拟环境
+        
+        virtualenv ztq_env(并激活虚拟环境)
+   
+   2.安装   
+
+        pip install ztq_core
+        pip install ztq_worker
+        pip install ztq_console
+
+   3.在 ztq_worker 目录运行
+        
+        python setup.py install
+
+   4.通过这个命令运行worker
 
         bin/ztq_worker worker.ini
 
@@ -107,7 +121,16 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
 启动监控后台
 --------------------
 
-    bin/pserve app.ini
+    在 ztq_console 目录下(已激活虚拟环境)
+    1.运行 python bootstrap.py
+    
+    2.运行 bin/buildout (安装了zc.buildout)
+
+    3.运行 bin/pserve app.ini
+
+    错误提示：
+    import paste.script.command
+    ImportError: No module named script.command
 
 更高级的特性
 --------------------------
