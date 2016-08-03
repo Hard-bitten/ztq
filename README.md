@@ -124,7 +124,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
     在 ztq_console 目录下(已激活虚拟环境)
     1.运行 python bootstrap.py
     
-    2.运行 bin/buildout (安装了zc.buildout)
+    2.运行 bin/buildout
 
     3.运行 bin/pserve app.ini
 
@@ -178,16 +178,18 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
             """ 将redis的AOF文件压缩 """
             redis = redis_wrap.get_redis()
             redis.bgrewriteaof()
-    
-    
+
         # 如果队列上没有这个定时任务，就加上。自动定时压缩reids
         if not has_cron(bgrewriteaof):
              add_cron({'hour':1}, bgrewriteaof)
 
+        # 如果只需执行一次
+        add_cron({'timestamp':123123123}, bgrewriteaof)
+
 5. 延时执行
-    
+
         # 10秒之后执行sendmail
-        sendmail(from, to, body, ztq_delay=10)
+        sendmail(from, to, body, ztq_delay=40)
 
 6. 自动重试
     
@@ -198,7 +200,7 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
                 os.sleep(30)
             except:
                 # 10秒时候再试
-                self.retry(countdown=10)
+                raise ztq_core.Retry(countdown=10)
     
         # 重试
         sendmail(from, to, body)
