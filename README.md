@@ -70,11 +70,14 @@ ZTQ是由易度云办公(http://easydo.cn) 赞助开发的，在易度云查看�
 3. 运行worker
 
    1.使用virtualenv 建立虚拟环境
+        
         virtualenv ztq_env(并激活虚拟环境)
    
-   2.安装   pip install ztq_core
-            pip install ztq_worker
-            pip install ztq_console
+   2.安装   
+
+        pip install ztq_core
+        pip install ztq_worker
+        pip install ztq_console
 
    3.在 ztq_worker 目录运行
         
